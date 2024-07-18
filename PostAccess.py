@@ -1,7 +1,10 @@
+from dotenv import load_dotenv
 import praw
 import os
 from CreateAudio import *
 
+
+load_dotenv()
 
 client_id = os.getenv('CLIENT_ID')
 client_secret = os.getenv('CLIENT_SECRET')
@@ -16,5 +19,5 @@ reddit = praw.Reddit(
 
 subreddit = reddit.subreddit('AITAH')
 
-for i, post in enumerate(subreddit.top(limit=5)):
+for i, post in enumerate(subreddit.top(limit=2)):
     CreateAudioFile(post.title + post.selftext, f"{i}")
