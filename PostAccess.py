@@ -1,5 +1,6 @@
 import praw
 import os
+from CreateAudio import *
 
 
 client_id = os.getenv('CLIENT_ID')
@@ -15,5 +16,5 @@ reddit = praw.Reddit(
 
 subreddit = reddit.subreddit('AITAH')
 
-for post in subreddit.top(limit=1):
-    print(f"{post.title}\n{post.selftext}")
+for i, post in enumerate(subreddit.top(limit=5)):
+    CreateAudioFile(post.title + post.selftext, f"{i}")
