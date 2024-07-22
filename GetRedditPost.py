@@ -4,6 +4,8 @@ import os
 from CreateAudio import *
 
 
+load_dotenv()
+
 
 load_dotenv()
 
