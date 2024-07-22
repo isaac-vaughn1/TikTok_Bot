@@ -6,9 +6,7 @@ from CreateAudio import *
 
 load_dotenv()
 
-
-load_dotenv()
-
+# Get environmental variables from the .env page
 client_id = os.getenv('CLIENT_ID')
 client_secret = os.getenv('CLIENT_SECRET')
 user_agent = os.getenv('USER_AGENT')
@@ -22,5 +20,5 @@ reddit = praw.Reddit(
 
 subreddit = reddit.subreddit('AITAH')
 
-for i, post in enumerate(subreddit.top(limit=1)):
-    CreateAudioFile(post.title + post.selftext, f"{i}")
+for i, post in enumerate(subreddit.top(limit=2)):
+    CreateVideo(CreateAudioFile(post.title + post.selftext, f"{i}"))
