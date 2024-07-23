@@ -1,5 +1,6 @@
 import requests, base64, random, argparse, os, playsound, time, re, textwrap
 from constants import voices
+from moviepy.editor import *
 
 API_BASE_URL = f"https://api16-normal-useast5.us.tiktokv.com/media/api/text/speech/invoke/"
 USER_AGENT = f"com.zhiliaoapp.musically/2022600030 (Linux; U; Android 7.1.2; es_ES; SM-G988N; Build/NRD90M;tt-ok/3.12.13.1)"
@@ -88,11 +89,47 @@ def sampler():
         req_text = 'TikTok Text To Speech Sample'
         tts(text_speaker, req_text, filename)
 
-session_id = "acffc64e85d672cb37274b3ba3068f5a"
-text_speaker = "en_uk_001"  # or any other voice code from constants.voices
-req_text = "SKIBIDI DORTNITE FANUM DUKE DENNIS RIZZLER BABY GRONK QUANDALE DINGLE"
-filename = "output.mp3"
-play = True
 
-# Call the tts function
-response = tts(session_id, text_speaker, req_text, filename, play)
+def process_long_text(session_id: str, text_speaker: str="en_us_006", req_text: str="Next time, provide some text", filename: str="voice.mp3"):
+    """
+    Splits long text by line, creating temporary audio files for each line
+
+    session_id: a user's TikTok session ID cookie
+    text_speaker: the desired AI voice for a recording
+    req_text: text for the AI to read
+    filename: the final mp3's filename
+
+    Returns: A fully combined AudioFileClip()
+    """
+    lines = req_text.split("\n")
+    filtered_lines = [line for line in lines if line.strip() != ""]
+
+    temp_files = []
+
+    for i, line in enumerate(filtered_lines):
+        temp_filename = f"temp_audio_{i}.mp3"
+        tts(session_id, text_speaker, line, temp_filename)
+        temp_files.append(temp_filename)
+
+    return combine_audio(temp_files, filename)
+
+
+def combine_audio(files: list, output_file: str="final.mp3"):
+    """
+    Combines all temporary audio files
+
+    files: a list of the temporary files
+    output_file: the name of our final mp3 file
+
+    Returns: the combined AudioFileClip()
+    """
+    audio = [AudioFileClip(filename) for filename in files]
+
+    combined_audio = concatenate_audioclips(audio)
+
+    combined_audio.write_audiofile(output_file)
+
+    for file in files:  # Clean up! Clean up! Everybody, everywhere!
+        os.remove(file)
+
+    return AudioFileClip(output_file)
