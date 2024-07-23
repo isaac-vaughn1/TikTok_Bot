@@ -7,7 +7,7 @@ def create_video(audio_file: AudioFileClip, title: str):
     """
     Creates the final TikTok video using a background and audio file.
 
-    The function gets a random mp4 from the folder of pre-downloaded mp4 files, trims it to match
+    This function gets a random mp4 from the folder of pre-downloaded mp4 files, trims it to match
     the length of the audio clip, saves the final product
 
     audio_file: A file containing a reddit story read by an AI voice
