@@ -101,17 +101,18 @@ def process_long_text(session_id: str, text_speaker: str="en_us_006", req_text: 
 
     Returns: A fully combined AudioFileClip()
     """
-    lines = req_text.split("\n")
-    filtered_lines = [line for line in lines if line.strip() != ""]
-
+    words_per_chunk = 45
+    words = req_text.split()
     temp_files = []
 
-    for i, line in enumerate(filtered_lines):
+    for i in range(0, len(words), words_per_chunk):
+        chunk = words[i:i + words_per_chunk]
         temp_filename = f"temp_audio_{i}.mp3"
-        tts(session_id, text_speaker, line, temp_filename)
+        tts(session_id, text_speaker, " ".join(chunk), temp_filename)
         temp_files.append(temp_filename)
 
     return combine_audio(temp_files, filename)
+    
 
 
 def combine_audio(files: list, output_file: str="final.mp3"):
@@ -133,3 +134,5 @@ def combine_audio(files: list, output_file: str="final.mp3"):
         os.remove(file)
 
     return AudioFileClip(output_file)
+
+# NOTE: tts() seems like it can only handle up to 49 words. Process the txt so it splits into groups of ~45 words for safe use
