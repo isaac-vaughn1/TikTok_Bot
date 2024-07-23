@@ -1,7 +1,7 @@
 from dotenv import load_dotenv
 import praw
 import os
-from CreateAudio import *
+from CreateVideo import *
 
 
 load_dotenv()

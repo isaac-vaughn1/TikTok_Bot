@@ -35,7 +35,6 @@ def create_video(audio_file: AudioFileClip, title: str):
     os.remove(f"{title}.mp3")
     os.remove(f"{title}.txt")
 
-    
 
 def get_random_mp4():
     """
