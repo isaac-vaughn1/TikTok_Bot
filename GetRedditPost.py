@@ -18,7 +18,7 @@ reddit = praw.Reddit(
     user_agent=user_agent,
 )
 
-subreddit = reddit.subreddit('AITAH')
+subreddit = reddit.subreddit('shortscarystories')
 
-for i, post in enumerate(subreddit.top(limit=2)):
-    CreateVideo(CreateAudioFile(post.title + post.selftext, f"{i}"))
+for i, post in enumerate(subreddit.top(limit=1)):
+    create_video(create_audio_file(post.title + post.selftext, f"{i}"), f"{i}")  # Create a new TikTok using a newly created AI Reddit mp3
