@@ -2,6 +2,12 @@ from gtts import gTTS
 from moviepy.editor import *
 import os
 import random
+from TikTokTTS import process_long_text
+from dotenv import load_dotenv
+
+load_dotenv()
+
+session_id = os.getenv('SESSION_ID')
 
 def create_video(audio_file: AudioFileClip, title: str):
     """
@@ -27,6 +33,7 @@ def create_video(audio_file: AudioFileClip, title: str):
     new_vid.close()
     audio_file.close()
     os.remove(f"{title}.mp3")
+    os.remove(f"{title}.txt")
 
     
 
@@ -44,16 +51,20 @@ def get_random_mp4():
 
 def create_audio_file(my_text: str, title: str):  
     """
-    Using gTTS, creates an mp3 of an AI voice reading a selected Reddit story
+    Using a TikTok TTS API wrapper, return an mp3 file of an AI voice reading Reddit stories
 
     my_text: The main body of the selected Reddit post
     title: A default title for each file; represents each story's index ikn the order it was retrieved
 
     Returns: The mp3 version of a Reddit post
     """
-    obj = gTTS(text=my_text, lang='en', tld='com.au')
-    obj.save(f"{title}.mp3")
-    
-    return AudioFileClip(f"{title}.mp3")
+    f = open(f"{title}.txt", "w")
+    f.write(my_text)
+    f.close()
 
+    text_speaker = "en_us_006"  # or any other voice code from constants.voices
+    req_text = open(f"{title}.txt", 'r', errors='ignore', encoding='utf-8').read()
+    filename = f"{title}.mp3"
+
+    return process_long_text(session_id, text_speaker, req_text, filename)
 
