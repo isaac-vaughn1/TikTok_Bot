@@ -22,11 +22,15 @@ def create_video(audio_file: AudioFileClip, title: str):
     mp4_path = get_random_mp4()
     background = VideoFileClip(mp4_path)
 
-    start = random.randint(0, int(background.duration) - int(audio_file.duration))
-    end = start + audio_file.duration
+    if background.duration < audio_file.duration:
+        new_vid = background.loop(duration = audio_file.duration)
+        new_vid = new_vid.set_audio(audio_file)
 
-    new_vid = background.subclip(start, end)
-    new_vid = new_vid.set_audio(audio_file)
+    else:
+        start = random.randint(0, int(background.duration) - int(audio_file.duration))
+        end = start + audio_file.duration
+        new_vid = background.subclip(start, end)
+        new_vid = new_vid.set_audio(audio_file)
 
     new_vid.write_videofile(f"{title}.mp4")
     background.close()
@@ -43,7 +47,7 @@ def get_random_mp4():
     Returns: a string representing the filepath to the chosen mp4
     """
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    relative_path = os.path.join('Backgrounds', 'GTAV.mp4')
+    relative_path = os.path.join('Backgrounds', 'Minecraft.mp4')
 
     return os.path.join(base_dir, relative_path)
 

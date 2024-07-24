@@ -92,7 +92,9 @@ def sampler():
 
 def process_long_text(session_id: str, text_speaker: str="en_us_006", req_text: str="Next time, provide some text", filename: str="voice.mp3"):
     """
-    Splits long text by line, creating temporary audio files for each line
+    Splits long text into chunks of 45 words, creating temporary audio files for each line
+
+    The TikTok API wrapper can only handle text up to 50 words. Splitting by chunks of 45 words seems to get past this issue.
 
     session_id: a user's TikTok session ID cookie
     text_speaker: the desired AI voice for a recording
@@ -106,8 +108,8 @@ def process_long_text(session_id: str, text_speaker: str="en_us_006", req_text: 
     temp_files = []
 
     for i in range(0, len(words), words_per_chunk):
+        temp_filename = f"temp_audio_{i//45}.mp3"
         chunk = words[i:i + words_per_chunk]
-        temp_filename = f"temp_audio_{i}.mp3"
         tts(session_id, text_speaker, " ".join(chunk), temp_filename)
         temp_files.append(temp_filename)
 
@@ -134,5 +136,3 @@ def combine_audio(files: list, output_file: str="final.mp3"):
         os.remove(file)
 
     return AudioFileClip(output_file)
-
-# NOTE: tts() seems like it can only handle up to 49 words. Process the txt so it splits into groups of ~45 words for safe use
