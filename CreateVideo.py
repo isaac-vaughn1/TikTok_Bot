@@ -3,6 +3,8 @@ from moviepy.editor import *
 import os
 import random
 from TikTokTTS import process_long_text
+from pytubefix import YouTube
+from pytubefix.cli import on_progress
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -38,18 +40,25 @@ def create_video(audio_file: AudioFileClip, title: str):
     audio_file.close()
     os.remove(f"{title}.mp3")
     os.remove(f"{title}.txt")
+    os.remove(mp4_path)
 
 
-def get_random_mp4():
+def get_random_mp4(title: str="BackgroundMP4.mp4"):
     """
     Retrieves a random mp4 file from the Backgrounds folder
 
     Returns: a string representing the filepath to the chosen mp4
     """
-    base_dir = os.path.dirname(os.path.abspath(__file__))
-    relative_path = os.path.join('Backgrounds', 'Minecraft.mp4')
+    with open("Backgrounds.txt", "r") as f:
+        links = [line.strip() for line in f.readlines()]
 
-    return os.path.join(base_dir, relative_path)
+    yt = YouTube(random.choice(links), on_progress_callback = on_progress)
+    yt = yt.streams.get_highest_resolution()
+    yt.download(filename=title)
+
+    file_path = os.path.abspath(title)
+
+    return file_path
 
 
 def create_audio_file(my_text: str, title: str):  
@@ -70,4 +79,3 @@ def create_audio_file(my_text: str, title: str):
     filename = f"{title}.mp3"
 
     return process_long_text(session_id, text_speaker, req_text, filename)
-
