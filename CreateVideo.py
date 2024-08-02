@@ -5,6 +5,8 @@ import random
 from TikTokTTS import process_long_text
 from pytubefix import YouTube
 from pytubefix.cli import on_progress
+import whisper
+import datetime
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -21,6 +23,15 @@ def create_video(audio_file: AudioFileClip, title: str):
     audio_file: A file containing a reddit story read by an AI voice
     title: A default title for each file; represents each story's index ikn the order it was retrieved
     """
+
+    # Load the Whisper model for subtitle generation
+    model = whisper.load_model("base")
+    result = model.transcribe(f"{title}.mp3")
+    srt_content = create_srt(result)
+
+    with open(f'{title}.srt', 'w') as srt_file:
+        srt_file.write(srt_content)
+
     mp4_path = get_random_mp4()
     background = VideoFileClip(mp4_path)
 
@@ -45,7 +56,7 @@ def create_video(audio_file: AudioFileClip, title: str):
 
 def get_random_mp4(title: str="BackgroundMP4.mp4"):
     """
-    Retrieves a random mp4 file from the Backgrounds folder
+    Retrieves a random YouTube link from Backgrounds.txt and downloads the video at the end of said link
 
     Returns: a string representing the filepath to the chosen mp4
     """
@@ -79,3 +90,26 @@ def create_audio_file(my_text: str, title: str):
     filename = f"{title}.mp3"
 
     return process_long_text(session_id, text_speaker, req_text, filename)
+
+def create_srt(transcription: dict):
+    """
+    Uses the transcribed audio from Whisper API to create an srt file for later subtitle creation
+
+    transcription: a dictionary with transcription info on our audio file returned by the Whisper API
+
+    Returns: the srt content in the form of a string
+    """
+    srt = []
+    for i, segment in enumerate(transcription['segments']):
+        start_time = str(datetime.timedelta(seconds=segment['start']))
+        end_time = str(datetime.timedelta(seconds=segment['end']))
+        text = segment['text'].strip()
+        
+        start_parts = start_time.split('.')
+        end_parts = end_time.split('.')
+        
+        start_time = start_parts[0] + (',' + start_parts[1][:3] if len(start_parts) > 1 else ',000')
+        end_time = end_parts[0] + (',' + end_parts[1][:3] if len(end_parts) > 1 else ',000')
+        
+        srt.append(f"{i+1}\n{start_time} --> {end_time}\n{text}\n")
+    return ''.join(srt)
