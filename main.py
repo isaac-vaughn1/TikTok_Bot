@@ -11,14 +11,17 @@ client_id = os.getenv('CLIENT_ID')
 client_secret = os.getenv('CLIENT_SECRET')
 user_agent = os.getenv('USER_AGENT')
 
+def main():
+    reddit = praw.Reddit(
+        client_id=client_id,
+        client_secret=client_secret,
+        user_agent=user_agent,
+    )
 
-reddit = praw.Reddit(
-    client_id=client_id,
-    client_secret=client_secret,
-    user_agent=user_agent,
-)
+    subreddit = reddit.subreddit('AITAH')
 
-subreddit = reddit.subreddit('PointlessStories')
+    for i, post in enumerate(subreddit.top(limit=1)):
+        create_video(create_audio_file(post.title + post.selftext, f"{i}"), f"{i}")  # Create a new TikTok using a newly created AI Reddit mp3
 
-for i, post in enumerate(subreddit.top(limit=1)):
-    create_video(create_audio_file(post.title + post.selftext, f"{i}"), f"{i}")  # Create a new TikTok using a newly created AI Reddit mp3
+if __name__ == "__main__":
+    main()

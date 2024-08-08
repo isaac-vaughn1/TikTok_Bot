@@ -34,8 +34,13 @@ def create_video(audio_file: AudioFileClip, title: str):
     result = model.transcribe(f"{title}.mp3")
     srt_content = create_srt(result)
 
-    with open(f'{title}.srt', 'w') as srt_file:
-        srt_file.write(srt_content)
+    try:
+        with open(f'{title}.srt', 'w') as srt_file:
+            srt_file.write(srt_content)
+    except FileNotFoundError:
+        print(f"File {title}.srt not found")
+    except Exception as e:
+        print(f"Looks like we have an error: {e}")
 
     mp4_path = get_random_mp4()
     background = VideoFileClip(mp4_path)
@@ -64,6 +69,7 @@ def create_video(audio_file: AudioFileClip, title: str):
     os.remove(f"{title}.txt")
     os.remove(f"{title}.srt")
     os.remove(mp4_path)
+    print('DING! Fries are done!')
 
 
 def get_random_mp4(title: str="BackgroundMP4.mp4"):
@@ -72,8 +78,13 @@ def get_random_mp4(title: str="BackgroundMP4.mp4"):
 
     Returns: a string representing the filepath to the chosen mp4
     """
-    with open("Backgrounds.txt", "r") as f:
-        links = [line.strip() for line in f.readlines()]
+    try:
+        with open("Backgrounds.txt", "r") as f:
+            links = [line.strip() for line in f.readlines()]
+    except FileNotFoundError:
+        print("File Backgrounds.txt not found")
+    except Exception as e:
+        print(f"Looks like we have an error: {e}")
 
     yt = YouTube(random.choice(links), on_progress_callback = on_progress)
     yt = yt.streams.get_highest_resolution()
@@ -93,9 +104,14 @@ def create_audio_file(my_text: str, title: str):
 
     Returns: The mp3 version of a Reddit post
     """
-    f = open(f"{title}.txt", "w")
-    f.write(my_text)
-    f.close()
+    try:
+        f = open(f"{title}.txt", "w")
+        f.write(my_text)
+        f.close()
+    except FileNotFoundError:
+        print(f"File {title}.txt not found")
+    except Exception as e:
+        print(f"Error using {title}.txt: {e}")
 
     text_speaker = "en_us_006"  # or any other voice code from constants.voices
     req_text = open(f"{title}.txt", 'r', errors='ignore', encoding='utf-8').read()
