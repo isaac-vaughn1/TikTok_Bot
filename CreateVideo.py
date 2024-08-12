@@ -1,4 +1,3 @@
-from gtts import gTTS
 from moviepy.editor import *
 from moviepy.video.tools.subtitles import SubtitlesClip
 from moviepy.config import change_settings
@@ -138,20 +137,23 @@ def create_srt(transcription: dict):
         words = text.split()
         word_duration = (end_time - start_time) / len(words)
 
-        for i, word in enumerate(words):
+        for i in range(0, len(words), 2):
             word_start_time = start_time + i * word_duration
-            word_end_time = word_start_time + word_duration
+            word_end_time = word_start_time + 2 * word_duration
 
             start_time_str = str(datetime.timedelta(seconds=word_start_time))
             end_time_str = str(datetime.timedelta(seconds=word_end_time))
-            
+
             start_parts = start_time_str.split('.')
             end_parts = end_time_str.split('.')
-            
+
             start_time_str = start_parts[0] + (',' + start_parts[1][:3] if len(start_parts) > 1 else ',000')
             end_time_str = end_parts[0] + (',' + end_parts[1][:3] if len(end_parts) > 1 else ',000')
+
+            # Combine the current word and the next word (if exists)
+            combined_words = ' '.join(words[i:i+2])
             
-            srt.append(f"{index}\n{start_time_str} --> {end_time_str}\n{word}\n\n")
+            srt.append(f"{index}\n{start_time_str} --> {end_time_str}\n{combined_words}\n\n")
             index += 1
 
     return ''.join(srt)
