@@ -5,6 +5,7 @@ This Python bot automatically creates TikTok videos of an AI voice reading Reddi
 - Reddit Story Retrieval: Automatically retrieves Reddit posts from aspecified subreddit
 - AI Voiceover: Converts the text of a Reddit post into speech using TikTok's AI voices
 - Video Creation: Automatically generates videos with a voiceover, background video, and subtitles
+- Custom Videos: Allows you to choose background video, AI voice, and more
 
 ## Installation
 1. Clone Repository:
@@ -69,11 +70,12 @@ To use this bot, you will need to configure several environmental variables. Her
      ```
      
 ## Usage
-1. After installing all requirements and ImageMagick, the final step is to run the bot. Simply execute the program and wait for the video to be created:
+After downloading required software and setting up the `.env` file, the bot should be ready to run
+1. _Optional_ Customize data found in `Configure.json` to create your very own video
+2. Run the program:
 ```
 python main.py
 ```
-2. The generated videos will be output to the project's root directory.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](License) file for details.
