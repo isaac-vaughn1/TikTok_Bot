@@ -77,5 +77,23 @@ After downloading required software and setting up the `.env` file, the bot shou
 python main.py
 ```
 
+## Troubleshooting
+- Using the most recent version of PyTorch can cause issues when loading the Whisper API (as of 8/13/24). To Fix:
+  1. Uninstall torch:
+     ```
+     pip uninstall torch
+     ```
+  2. Resinstall a 2.x.x version of torch:
+     ```
+     pip install torch==2.2.2
+     ```
+- If you had to install a 2.x.x version of PyTorch, you will also have to downgrade NumPy to a 1.x version:
+```
+pip install numpy<2
+```
+
+## Contributing
+Feel free to open issues or submit pull requests to improve this bot.
+
 ## License
 This project is licensed under the MIT License - see the [LICENSE](License) file for details.
