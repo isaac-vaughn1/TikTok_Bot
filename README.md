@@ -76,4 +76,4 @@ python main.py
 2. The generated videos will be output to the project's root directory.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](License) file for details.
