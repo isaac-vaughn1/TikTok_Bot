@@ -1,6 +1,7 @@
 from dotenv import load_dotenv
 import praw
 import os
+from json_loader import data
 from CreateVideo import *
 
 
@@ -18,9 +19,9 @@ def main():
         user_agent=user_agent,
     )
 
-    subreddit = reddit.subreddit('AITAH')
+    subreddit = reddit.subreddit(data['subreddit'])
 
-    for i, post in enumerate(subreddit.top(limit=1)):
+    for i, post in enumerate(subreddit.top(limit=data['video_amount'])):
         create_video(create_audio_file(post.title + post.selftext, f"{i}"), f"{i}")  # Create a new TikTok using a newly created AI Reddit mp3
 
 if __name__ == "__main__":

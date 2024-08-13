@@ -4,6 +4,7 @@ from moviepy.config import change_settings
 import os
 import random
 from TikTokTTS import process_long_text
+from json_loader import data
 from pytubefix import YouTube
 from pytubefix.cli import on_progress
 import whisper
@@ -73,19 +74,11 @@ def create_video(audio_file: AudioFileClip, title: str):
 
 def get_random_mp4(title: str="BackgroundMP4.mp4"):
     """
-    Retrieves a random YouTube link from Backgrounds.txt and downloads the video at the end of said link
+    Downloads a YouTube video from the provided link in Configure.json
 
     Returns: a string representing the filepath to the chosen mp4
     """
-    try:
-        with open("Backgrounds.txt", "r") as f:
-            links = [line.strip() for line in f.readlines()]
-    except FileNotFoundError:
-        print("File Backgrounds.txt not found")
-    except Exception as e:
-        print(f"Looks like we have an error: {e}")
-
-    yt = YouTube(random.choice(links), on_progress_callback = on_progress)
+    yt = YouTube(data['background'], on_progress_callback = on_progress)
     yt = yt.streams.get_highest_resolution()
     yt.download(filename=title)
 
