@@ -67,9 +67,13 @@ To use this bot, you will need to configure several environmental variables. Her
      SESSION_ID='your_tiktok_session_id'
      MAGICK_PATH=your_magick_path
      ```
+     
 ## Usage
 1. After installing all requirements and ImageMagick, the final step is to run the bot. Simply execute the program and wait for the video to be created:
 ```
 python main.py
 ```
 2. The generated videos will be output to the project's root directory.
+
+## License
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
