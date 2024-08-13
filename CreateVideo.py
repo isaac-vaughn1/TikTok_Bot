@@ -105,7 +105,7 @@ def create_audio_file(my_text: str, title: str):
     except Exception as e:
         print(f"Error using {title}.txt: {e}")
 
-    text_speaker = "en_us_006"  # or any other voice code from constants.voices
+    text_speaker = data['voice']  # or any other voice code from constants.voices
     req_text = open(f"{title}.txt", 'r', errors='ignore', encoding='utf-8').read()
     filename = f"{title}.mp3"
 
