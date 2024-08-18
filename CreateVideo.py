@@ -35,6 +35,7 @@ def create_video(audio_file: AudioFileClip, title: str):
         result = model.transcribe(f"{title}.mp3")
     except Exception as e:
         print(f"There was an error loading the Whisper API: {e}")
+        
     srt_content = create_srt(result)
 
     try:
