@@ -30,8 +30,11 @@ def create_video(audio_file: AudioFileClip, title: str):
     """
 
     # Load the Whisper model for subtitle generation
-    model = whisper.load_model("base")
-    result = model.transcribe(f"{title}.mp3")
+    try:
+        model = whisper.load_model("base")
+        result = model.transcribe(f"{title}.mp3")
+    except Exception as e:
+        print(f"There was an error loading the Whisper API: {e}")
     srt_content = create_srt(result)
 
     try:
@@ -61,6 +64,7 @@ def create_video(audio_file: AudioFileClip, title: str):
     sub = SubtitlesClip(f"{title}.srt", generator)
     final_vid = CompositeVideoClip([new_vid, sub.set_position('center')])
 
+    # Clean up unneeded files
     final_vid.write_videofile(f"{title}.mp4")
     background.close()
     new_vid.close()
@@ -113,7 +117,7 @@ def create_audio_file(my_text: str, title: str):
 
 def create_srt(transcription: dict):
     """
-    Uses the transcribed audio from Whisper API to create an SRT file which will display one word at a time 
+    Uses the transcribed audio from Whisper API to create an SRT file which will display two words at a time 
     to keep the attention of TikTok users
     
     Transcription: a dictionary with transcription info on our audio file returned by the Whisper API.
