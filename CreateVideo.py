@@ -43,7 +43,7 @@ def create_video(audio_file: AudioFileClip, title: str):
     except FileNotFoundError:
         print(f"File {title}.srt not found")
     except Exception as e:
-        print(f"Looks like we have an error: {e}")
+        print(f"There was an error loading {title}.srt: {e}")
 
     mp4_path = get_random_mp4()
     background = VideoFileClip(mp4_path)
@@ -107,7 +107,7 @@ def create_audio_file(my_text: str, title: str):
     except FileNotFoundError:
         print(f"File {title}.txt not found")
     except Exception as e:
-        print(f"Error using {title}.txt: {e}")
+        print(f"There was an error loading {title}.txt: {e}")
 
     text_speaker = data['voice']  # or any other voice code from constants.voices
     req_text = open(f"{title}.txt", 'r', errors='ignore', encoding='utf-8').read()
