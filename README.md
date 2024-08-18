@@ -76,7 +76,7 @@ After downloading required software and setting up the `.env` file, the bot shou
 ```
 python main.py
 ```
-Results will be installed within the root folder of the project
+Results will be found in the root folder of the project
 
 ## Troubleshooting
 - Using the most recent version of PyTorch can cause issues when loading the Whisper API (as of 8/13/24). To Fix:
